@@ -1,4 +1,4 @@
-"""R2 controller — generates presigned URLs for resume uploads."""
+"""R2 controller — generates presigned URLs for asset uploads."""
 
 import re
 import uuid
@@ -8,9 +8,9 @@ from fastapi import HTTPException, status
 from app.models.user import User
 from app.services.r2_service import ALLOWED_CONTENT_TYPES, ALLOWED_EXTENSIONS, get_r2_service
 
-# file_key must match: resumes/{uuid}/{hex}.{ext}
+# file_key must match: assets/{uuid}/{hex}.{ext}
 _FILE_KEY_RE = re.compile(
-    r"^resumes/[0-9a-f\-]{36}/[0-9a-f]{32}\.\w+$"
+    r"^assets/[0-9a-f\-]{36}/[0-9a-f]{32}\.\w+$"
 )
 
 
@@ -33,18 +33,18 @@ def _validate_extension(filename: str) -> str:
     return ext
 
 
-def get_resume_upload_url(user: User, filename: str, content_type: str) -> dict:
-    """Return a presigned PUT URL scoped to the user's resume path."""
+def get_asset_upload_url(user: User, filename: str, content_type: str) -> dict:
+    """Return a presigned PUT URL scoped to the user's asset path."""
     _validate_content_type(content_type)
     ext = _validate_extension(filename)
 
-    file_key = f"resumes/{user.id}/{uuid.uuid4().hex}.{ext}"
+    file_key = f"assets/{user.id}/{uuid.uuid4().hex}.{ext}"
 
     upload_url = get_r2_service().generate_upload_url(file_key, content_type)
     return {"upload_url": upload_url, "file_key": file_key}
 
 
-def get_resume_read_url(file_key: str) -> dict:
+def get_asset_read_url(file_key: str) -> dict:
     """Return a presigned GET URL for the given file key."""
     if not _FILE_KEY_RE.match(file_key):
         raise HTTPException(

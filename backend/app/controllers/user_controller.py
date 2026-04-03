@@ -51,12 +51,12 @@ async def delete_user(user_id: uuid.UUID, db: AsyncSession) -> None:
 
 
 async def submit_application(current_user: User, form_response: dict, db: AsyncSession) -> User:
-    resume_key = form_response.get("resume_file_key", "")
-    expected_prefix = f"resumes/{current_user.id}/"
-    if not resume_key.startswith(expected_prefix):
+    asset_key = form_response.get("asset_file_key", "")
+    expected_prefix = f"assets/{current_user.id}/"
+    if not asset_key.startswith(expected_prefix):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Resume file key does not belong to this user.",
+            detail="asset file key does not belong to this user.",
         )
     return await submit_application_for_current_user(db, current_user=current_user, form_response=form_response)
 

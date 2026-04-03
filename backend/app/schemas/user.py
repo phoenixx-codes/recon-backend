@@ -33,7 +33,7 @@ class ApplicationSubmit(SQLModel):
     email: EmailStr
     phone_number: str = Field(min_length=7, max_length=20)
     dob: datetime.date
-    resume_file_key: str = Field(min_length=1, max_length=512)
+    asset_file_key: str = Field(min_length=1, max_length=512)
 
 
 class UserUpdate(SQLModel):

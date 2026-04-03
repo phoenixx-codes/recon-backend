@@ -1,4 +1,4 @@
-"""R2 router — presigned URL endpoints for resume uploads."""
+"""R2 router — presigned URL endpoints for asset uploads."""
 
 from fastapi import APIRouter, Depends, Query
 from sqlmodel import SQLModel
@@ -29,8 +29,8 @@ async def get_upload_url(
     current_user: User = Depends(get_current_user),
     _: User = Depends(require_roles(ROLE_APPLICANT)),
 ):
-    """Get a presigned URL to upload a resume directly to R2."""
-    return r2_controller.get_resume_upload_url(current_user, filename, content_type)
+    """Get a presigned URL to upload a asset directly to R2."""
+    return r2_controller.get_asset_upload_url(current_user, filename, content_type)
 
 
 @router.get("/read-url", response_model=PresignedReadResponse)
@@ -38,5 +38,5 @@ async def get_read_url(
     file_key: str = Query(..., min_length=1),
     _: User = Depends(require_roles(ROLE_ADMIN)),
 ):
-    """Get a presigned URL to read/download a resume from R2 (admin only)."""
-    return r2_controller.get_resume_read_url(file_key)
+    """Get a presigned URL to read/download a asset from R2 (admin only)."""
+    return r2_controller.get_asset_read_url(file_key)

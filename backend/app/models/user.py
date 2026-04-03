@@ -7,20 +7,11 @@ from sqlmodel import Field, Relationship, SQLModel
 
 from app.models.base import Base
 
-STATUS_PENDING = "pending"
-STATUS_APPROVED = "approved"
-STATUS_REJECTED = "rejected"
-
 
 class UserBase(SQLModel):
     email: str = Field(max_length=320, unique=True, index=True)
     username: str = Field(max_length=50, unique=True, index=True)
     is_active: bool = Field(default=True)
-    status: Optional[str] = Field(
-        default=None,
-        max_length=50,
-        nullable=True,
-    )
 
 class User(Base, UserBase, table=True):
     __tablename__ = "users"
